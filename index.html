@@ -66,12 +66,20 @@
               const x = normalizedR * redVertex.x + normalizedG * greenVertex.x + normalizedB * blueVertex.x;
               const y = normalizedR * redVertex.y + normalizedG * greenVertex.y + normalizedB * blueVertex.y;
 
+              // Calculate perceived brightness (using relative luminance formula)
+              const r_linear = parseInt(colorMap[r], 16) / 255;
+              const g_linear = parseInt(colorMap[g], 16) / 255;
+              const b_linear = parseInt(colorMap[b], 16) / 255;
+              const luminance = 0.2126 * r_linear + 0.7152 * g_linear + 0.0722 * b_linear;
+              const textColor = luminance < 0.5 ? '#FFF' : '#000';
+
               const colorDiv = document.createElement("div");
               colorDiv.className = "color";
               colorDiv.style.backgroundColor = color;
               colorDiv.style.marginLeft = `${x}px`;
               colorDiv.style.marginTop = `${y}px`;
               colorDiv.innerText = color;
+              colorDiv.style.color = textColor;
 
               document.getElementById("colors").appendChild(colorDiv);
             }
