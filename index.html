@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="manifest" href="./src/manifest.json" />
+    <title>6-Bit Color Wheel</title>
+
+    <style>
+
+      body {
+        background: #000;
+      }
+
+      div {
+        box-sizing: border-box;
+      }
+
+      #colors {
+        height: 100vh;
+        width: 100vw;
+      }
+
+      #colors .color {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 62px;
+        height: 62px;
+        border-radius: 31px;
+        font-family: monospace;
+        text-align: center;
+        font-size: 10px;
+        padding: 22px 0;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="colors"></div>
+    <script>
+      const colorMap = ["00", "55", "AA", "FF"];
+      function main() {
+        console.log("Generating colors...");
+        for (let r = 0; r < colorMap.length; r++) {
+          for (let g = 0; g < colorMap.length; g++) {
+            for (let b = 0; b < colorMap.length; b++) {
+              const color = `#${colorMap[r]}${colorMap[g]}${colorMap[b]}`;
+
+              const totalColors = colorMap.length;
+              const colorIndex = r * colorMap.length * colorMap.length + g * colorMap.length + b;
+              const normalizedR = r / (totalColors - 1);
+              const normalizedG = g / (totalColors - 1);
+              const normalizedB = b / (totalColors - 1);
+
+              // Triangle vertices (red top, green bottom-left, blue bottom-right)
+              const redVertex = { x: 0, y: -200 };
+              const greenVertex = { x: -173, y: 100 };
+              const blueVertex = { x: 173, y: 100 };
+
+              // Barycentric interpolation
+              const x = normalizedR * redVertex.x + normalizedG * greenVertex.x + normalizedB * blueVertex.x;
+              const y = normalizedR * redVertex.y + normalizedG * greenVertex.y + normalizedB * blueVertex.y;
+
+              const colorDiv = document.createElement("div");
+              colorDiv.className = "color";
+              colorDiv.style.backgroundColor = color;
+              colorDiv.style.marginLeft = `${x}px`;
+              colorDiv.style.marginTop = `${y}px`;
+              colorDiv.innerText = color;
+
+              document.getElementById("colors").appendChild(colorDiv);
+            }
+          }
+        }
+      }
+
+      main();
+    </script>
+  </body>
+</html>
